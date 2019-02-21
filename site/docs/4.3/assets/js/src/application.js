@@ -154,4 +154,4 @@
 
     bsCustomFileInput.init()
   })
-}())
+})()

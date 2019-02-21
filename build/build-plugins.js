@@ -7,16 +7,17 @@
 
 'use strict'
 
-const path    = require('path')
-const rollup  = require('rollup')
-const babel   = require('rollup-plugin-babel')
-const banner  = require('./banner.js')
+const path = require('path')
+const rollup = require('rollup')
+const babel = require('rollup-plugin-babel')
+const banner = require('./banner.js')
 
-const TEST    = process.env.NODE_ENV === 'test'
+const TEST = process.env.NODE_ENV === 'test'
 const plugins = [
   babel({
     exclude: 'node_modules/**', // Only transpile our source code
-    externalHelpersWhitelist: [ // Include only required helpers
+    // Include only required helpers
+    externalHelpersWhitelist: [
       'defineProperties',
       'createClass',
       'inheritsLoose',
@@ -158,9 +159,7 @@ function getConfigByPluginKey(pluginKey) {
 function build(plugin) {
   console.log(`Building ${plugin} plugin...`)
 
-  const config = getConfigByPluginKey(plugin)
-  const external = config.external
-  const globals = config.globals
+  const { external, globals } = getConfigByPluginKey(plugin)
 
   const pluginPath = [
     'Data',
@@ -176,7 +175,7 @@ function build(plugin) {
     input: bsPlugins[plugin],
     plugins,
     external
-  }).then((bundle) => {
+  }).then(bundle => {
     bundle.write({
       banner: banner(pluginFilename),
       format: 'umd',
@@ -186,8 +185,8 @@ function build(plugin) {
       file: path.resolve(__dirname, `${pluginPath}${pluginFilename}`)
     })
       .then(() => console.log(`Building ${plugin} plugin... Done!`))
-      .catch((err) => console.error(`${plugin}: ${err}`))
+      .catch(err => console.error(`${plugin}: ${err}`))
   })
 }
 
-Object.keys(bsPlugins).forEach((plugin) => build(plugin))
+Object.keys(bsPlugins).forEach(plugin => build(plugin))

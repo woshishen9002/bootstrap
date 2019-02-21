@@ -16,26 +16,61 @@ import Util from '../util'
 
 const namespaceRegex = /[^.]*(?=\..*)\.|.*/
 const stripNameRegex = /\..*/
-const keyEventRegex  = /^key/
-const stripUidRegex  = /::\d+$/
-const eventRegistry  = {}   // Events storage
-let uidEvent         = 1
-const customEvents   = {
+const keyEventRegex = /^key/
+const stripUidRegex = /::\d+$/
+const eventRegistry = {} // Events storage
+let uidEvent = 1
+const customEvents = {
   mouseenter: 'mouseover',
   mouseleave: 'mouseout'
 }
-const nativeEvents   = [
-  'click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu',
-  'mousewheel', 'DOMMouseScroll',
-  'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend',
-  'keydown', 'keypress', 'keyup',
+const nativeEvents = [
+  'click',
+  'dblclick',
+  'mouseup',
+  'mousedown',
+  'contextmenu',
+  'mousewheel',
+  'DOMMouseScroll',
+  'mouseover',
+  'mouseout',
+  'mousemove',
+  'selectstart',
+  'selectend',
+  'keydown',
+  'keypress',
+  'keyup',
   'orientationchange',
-  'touchstart', 'touchmove', 'touchend', 'touchcancel',
-  'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel',
-  'gesturestart', 'gesturechange', 'gestureend',
-  'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout',
-  'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange',
-  'error', 'abort', 'scroll'
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'touchcancel',
+  'pointerdown',
+  'pointermove',
+  'pointerup',
+  'pointerleave',
+  'pointercancel',
+  'gesturestart',
+  'gesturechange',
+  'gestureend',
+  'focus',
+  'blur',
+  'change',
+  'reset',
+  'select',
+  'submit',
+  'focusin',
+  'focusout',
+  'load',
+  'unload',
+  'beforeunload',
+  'resize',
+  'move',
+  'DOMContentLoaded',
+  'readystatechange',
+  'error',
+  'abort',
+  'scroll'
 ]
 
 /**
@@ -79,7 +114,7 @@ function bootstrapDelegationHandler(element, selector, fn) {
   return function handler(event) {
     const domElements = element.querySelectorAll(selector)
 
-    for (let target = event.target; target && target !== this; target = target.parentNode) {
+    for (let { target } = event; target && target !== this; target = target.parentNode) {
       for (let i = domElements.length; i--;) {
         if (domElements[i] === target) {
           fixEvent(event, target)
@@ -145,8 +180,8 @@ function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
   }
 
   const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn)
-  const events     = getEvent(element)
-  const handlers   = events[typeEvent] || (events[typeEvent] = {})
+  const events = getEvent(element)
+  const handlers = events[typeEvent] || (events[typeEvent] = {})
   const previousFn = findHandler(handlers, originalHandler, delegation ? handler : null)
 
   if (previousFn) {
@@ -156,7 +191,7 @@ function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
   }
 
   const uid = getUidEvent(originalHandler, originalTypeEvent.replace(namespaceRegex, ''))
-  const fn  = !delegation ? bootstrapHandler(element, handler) : bootstrapDelegationHandler(element, handler, delegationFn)
+  const fn = !delegation ? bootstrapHandler(element, handler) : bootstrapDelegationHandler(element, handler, delegationFn)
 
   fn.delegationSelector = delegation ? handler : null
   fn.originalHandler = originalHandler
@@ -182,7 +217,7 @@ function removeNamespacedHandlers(element, events, typeEvent, namespace) {
   const storeElementEvent = events[typeEvent] || {}
 
   Object.keys(storeElementEvent)
-    .forEach((handlerKey) => {
+    .forEach(handlerKey => {
       if (handlerKey.indexOf(namespace) > -1) {
         const event = storeElementEvent[handlerKey]
 
@@ -222,14 +257,14 @@ const EventHandler = {
 
     if (isNamespace) {
       Object.keys(events)
-        .forEach((elementEvent) => {
+        .forEach(elementEvent => {
           removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.substr(1))
         })
     }
 
     const storeElementEvent = events[typeEvent] || {}
     Object.keys(storeElementEvent)
-      .forEach((keyHandlers) => {
+      .forEach(keyHandlers => {
         const handlerKey = keyHandlers.replace(stripUidRegex, '')
 
         if (!inNamespace || originalTypeEvent.indexOf(handlerKey) > -1) {
@@ -245,9 +280,9 @@ const EventHandler = {
       return null
     }
 
-    const typeEvent   = event.replace(stripNameRegex, '')
+    const typeEvent = event.replace(stripNameRegex, '')
     const inNamespace = event !== typeEvent
-    const isNative    = nativeEvents.indexOf(typeEvent) > -1
+    const isNative = nativeEvents.indexOf(typeEvent) > -1
     const $ = Util.jQuery
 
     let jQueryEvent
@@ -278,7 +313,7 @@ const EventHandler = {
     // merge custom informations in our event
     if (typeof args !== 'undefined') {
       Object.keys(args)
-        .forEach((key) => {
+        .forEach(key => {
           Object.defineProperty(evt, key, {
             get() {
               return args[key]

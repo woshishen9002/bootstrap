@@ -336,7 +336,7 @@ $(function () {
     assert.expect(3)
     var $tooltip = $('<div/>')
       .bootstrapTooltip()
-      .on('click.foo', function () {})  // eslint-disable-line no-empty-function
+      .on('click.foo', function () {}) // eslint-disable-line no-empty-function
 
     assert.ok(Tooltip._getInstance($tooltip[0]), 'tooltip has data')
 

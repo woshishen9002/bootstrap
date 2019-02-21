@@ -162,6 +162,7 @@ $(function () {
       }, 0)
       $carousel[0].removeEventListener('slide.bs.carousel', onSlide)
     }
+
     $carousel[0].addEventListener('slide.bs.carousel', onSlide)
 
     function onSlid() {
@@ -174,6 +175,7 @@ $(function () {
       }, 0)
       $carousel[0].removeEventListener('slid.bs.carousel', onSlid)
     }
+
     $carousel[0].addEventListener('slid.bs.carousel', onSlid)
 
     $carousel.bootstrapCarousel('next')
@@ -683,6 +685,7 @@ $(function () {
       assert.strictEqual(event.defaultPrevented, false)
       $template[0].removeEventListener('keydown', handlerKeydown)
     }
+
     $template[0].addEventListener('keydown', handlerKeydown)
 
     // arrow down
@@ -695,6 +698,7 @@ $(function () {
       $template[0].addEventListener('keydown', handlerKeydown2)
       done()
     }
+
     $template[0].addEventListener('keydown', handlerKeydown2)
 
     // arrow up

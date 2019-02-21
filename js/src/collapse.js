@@ -17,45 +17,45 @@ import Util from './util'
  * ------------------------------------------------------------------------
  */
 
-const NAME                = 'collapse'
-const VERSION             = '4.3.1'
-const DATA_KEY            = 'bs.collapse'
-const EVENT_KEY           = `.${DATA_KEY}`
-const DATA_API_KEY        = '.data-api'
+const NAME = 'collapse'
+const VERSION = '4.3.1'
+const DATA_KEY = 'bs.collapse'
+const EVENT_KEY = `.${DATA_KEY}`
+const DATA_API_KEY = '.data-api'
 
 const Default = {
-  toggle : true,
-  parent : ''
+  toggle: true,
+  parent: ''
 }
 
 const DefaultType = {
-  toggle : 'boolean',
-  parent : '(string|element)'
+  toggle: 'boolean',
+  parent: '(string|element)'
 }
 
 const Event = {
-  SHOW           : `show${EVENT_KEY}`,
-  SHOWN          : `shown${EVENT_KEY}`,
-  HIDE           : `hide${EVENT_KEY}`,
-  HIDDEN         : `hidden${EVENT_KEY}`,
-  CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}`
+  SHOW: `show${EVENT_KEY}`,
+  SHOWN: `shown${EVENT_KEY}`,
+  HIDE: `hide${EVENT_KEY}`,
+  HIDDEN: `hidden${EVENT_KEY}`,
+  CLICK_DATA_API: `click${EVENT_KEY}${DATA_API_KEY}`
 }
 
 const ClassName = {
-  SHOW       : 'show',
-  COLLAPSE   : 'collapse',
-  COLLAPSING : 'collapsing',
-  COLLAPSED  : 'collapsed'
+  SHOW: 'show',
+  COLLAPSE: 'collapse',
+  COLLAPSING: 'collapsing',
+  COLLAPSED: 'collapsed'
 }
 
 const Dimension = {
-  WIDTH  : 'width',
-  HEIGHT : 'height'
+  WIDTH: 'width',
+  HEIGHT: 'height'
 }
 
 const Selector = {
-  ACTIVES     : '.show, .collapsing',
-  DATA_TOGGLE : '[data-toggle="collapse"]'
+  ACTIVES: '.show, .collapsing',
+  DATA_TOGGLE: '[data-toggle="collapse"]'
 }
 
 /**
@@ -67,9 +67,9 @@ const Selector = {
 class Collapse {
   constructor(element, config) {
     this._isTransitioning = false
-    this._element         = element
-    this._config          = this._getConfig(config)
-    this._triggerArray    = Util.makeArray(SelectorEngine.find(
+    this._element = element
+    this._config = this._getConfig(config)
+    this._triggerArray = Util.makeArray(SelectorEngine.find(
       `[data-toggle="collapse"][href="#${element.id}"],` +
       `[data-toggle="collapse"][data-target="#${element.id}"]`
     ))
@@ -79,7 +79,7 @@ class Collapse {
       const elem = toggleList[i]
       const selector = Util.getSelectorFromElement(elem)
       const filterElement = Util.makeArray(SelectorEngine.find(selector))
-        .filter((foundElem) => foundElem === element)
+        .filter(foundElem => foundElem === element)
 
       if (selector !== null && filterElement.length) {
         this._selector = selector
@@ -131,7 +131,7 @@ class Collapse {
 
     if (this._parent) {
       actives = Util.makeArray(SelectorEngine.find(Selector.ACTIVES, this._parent))
-        .filter((elem) => {
+        .filter(elem => {
           if (typeof this._config.parent === 'string') {
             return elem.getAttribute('data-parent') === this._config.parent
           }
@@ -146,7 +146,7 @@ class Collapse {
 
     const container = SelectorEngine.findOne(this._selector)
     if (actives) {
-      const tempActiveData = actives.filter((elem) => container !== elem)
+      const tempActiveData = actives.filter(elem => container !== elem)
       activesData = tempActiveData[0] ? Data.getData(tempActiveData[0], DATA_KEY) : null
 
       if (activesData && activesData._isTransitioning) {
@@ -160,7 +160,7 @@ class Collapse {
     }
 
     if (actives) {
-      actives.forEach((elemActive) => {
+      actives.forEach(elemActive => {
         if (container !== elemActive) {
           Collapse._collapseInterface(elemActive, 'hide')
         }
@@ -179,7 +179,7 @@ class Collapse {
     this._element.style[dimension] = 0
 
     if (this._triggerArray.length) {
-      this._triggerArray.forEach((element) => {
+      this._triggerArray.forEach(element => {
         element.classList.remove(ClassName.COLLAPSED)
         element.setAttribute('aria-expanded', true)
       })
@@ -270,10 +270,10 @@ class Collapse {
   dispose() {
     Data.removeData(this._element, DATA_KEY)
 
-    this._config          = null
-    this._parent          = null
-    this._element         = null
-    this._triggerArray    = null
+    this._config = null
+    this._parent = null
+    this._element = null
+    this._triggerArray = null
     this._isTransitioning = null
   }
 
@@ -312,7 +312,7 @@ class Collapse {
       `[data-toggle="collapse"][data-parent="${this._config.parent}"]`
 
     Util.makeArray(SelectorEngine.find(selector, parent))
-      .forEach((element) => {
+      .forEach(element => {
         this._addAriaAndCollapsedClass(
           Collapse._getTargetFromElement(element),
           [element]
@@ -327,12 +327,13 @@ class Collapse {
       const isOpen = element.classList.contains(ClassName.SHOW)
 
       if (triggerArray.length) {
-        triggerArray.forEach((elem) => {
+        triggerArray.forEach(elem => {
           if (!isOpen) {
             elem.classList.add(ClassName.COLLAPSED)
           } else {
             elem.classList.remove(ClassName.COLLAPSED)
           }
+
           elem.setAttribute('aria-expanded', isOpen)
         })
       }
@@ -347,7 +348,7 @@ class Collapse {
   }
 
   static _collapseInterface(element, config) {
-    let data      = Data.getData(element, DATA_KEY)
+    let data = Data.getData(element, DATA_KEY)
     const _config = {
       ...Default,
       ...Manipulator.getDataAttributes(element),
@@ -366,6 +367,7 @@ class Collapse {
       if (typeof data[config] === 'undefined') {
         throw new Error(`No method named "${config}"`)
       }
+
       data[config]()
     }
   }
@@ -393,11 +395,11 @@ EventHandler.on(document, Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (
     event.preventDefault()
   }
 
-  const triggerData      = Manipulator.getDataAttributes(this)
-  const selector         = Util.getSelectorFromElement(this)
+  const triggerData = Manipulator.getDataAttributes(this)
+  const selector = Util.getSelectorFromElement(this)
   const selectorElements = Util.makeArray(SelectorEngine.find(selector))
 
-  selectorElements.forEach((element) => {
+  selectorElements.forEach(element => {
     const data = Data.getData(element, DATA_KEY)
     let config
     if (data) {
@@ -406,6 +408,7 @@ EventHandler.on(document, Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (
         data._config.parent = triggerData.parent
         data._parent = data._getParent()
       }
+
       config = 'toggle'
     } else {
       config = triggerData
@@ -424,10 +427,10 @@ EventHandler.on(document, Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (
 
 const $ = Util.jQuery
 if (typeof $ !== 'undefined') {
-  const JQUERY_NO_CONFLICT  = $.fn[NAME]
-  $.fn[NAME]                = Collapse._jQueryInterface
-  $.fn[NAME].Constructor    = Collapse
-  $.fn[NAME].noConflict     = () => {
+  const JQUERY_NO_CONFLICT = $.fn[NAME]
+  $.fn[NAME] = Collapse._jQueryInterface
+  $.fn[NAME].Constructor = Collapse
+  $.fn[NAME].noConflict = () => {
     $.fn[NAME] = JQUERY_NO_CONFLICT
     return Collapse._jQueryInterface
   }

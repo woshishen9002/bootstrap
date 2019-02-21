@@ -459,7 +459,7 @@ $(function () {
         '<div class="card"/>' +
         '</div>'
     var showFired = false
-    var $groups   = $(accordionHTML).appendTo('#qunit-fixture').find('.card')
+    var $groups = $(accordionHTML).appendTo('#qunit-fixture').find('.card')
 
     var $target1 = $('<a role="button" data-toggle="collapse" href="#body1"/>').appendTo($groups.eq(0))
 
@@ -470,7 +470,7 @@ $(function () {
       })
 
     var $target2 = $('<a role="button" data-toggle="collapse" href="#body2"/>').appendTo($groups.eq(1))
-    var $body2   = $('<div id="body2" class="collapse" data-parent="#accordion"/>').appendTo($groups.eq(1))
+    var $body2 = $('<div id="body2" class="collapse" data-parent="#accordion"/>').appendTo($groups.eq(1))
 
     $target2[0].dispatchEvent(new Event('click'))
 
@@ -607,8 +607,8 @@ $(function () {
     var $collapseTwoOne = $('#collapseTwoOne')
     var $collapseTwoTwo = $('#collapseTwoTwo')
     var collapsedElements = {
-      one : false,
-      two : false
+      one: false,
+      two: false
     }
 
     function firstTest() {
