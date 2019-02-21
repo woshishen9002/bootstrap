@@ -9,6 +9,7 @@
     "sourceType": "script"
   },
   "extends": [
+    "plugin:unicorn/recommended",
     "xo",
     "xo/browser"
   ],
@@ -33,6 +34,8 @@
     "semi": [
       "error",
       "never"
-    ]
+    ],
+    "unicorn/prefer-query-selector": "off",
+    "unicorn/no-unused-properties": "error"
   }
 }
