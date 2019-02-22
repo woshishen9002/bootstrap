@@ -5,11 +5,22 @@
  * --------------------------------------------------------------------------
  */
 
+import {
+  jQuery as $,
+  TRANSITION_END,
+  emulateTransitionEnd,
+  getSelectorFromElement,
+  getTransitionDurationFromElement,
+  isVisible,
+  makeArray,
+  reflow,
+  triggerTransitionEnd,
+  typeCheckConfig
+} from './util/index'
 import Data from './dom/data'
 import EventHandler from './dom/eventHandler'
 import Manipulator from './dom/manipulator'
 import SelectorEngine from './dom/selectorEngine'
-import Util from './util'
 
 /**
  * ------------------------------------------------------------------------
@@ -143,7 +154,7 @@ class Carousel {
   nextWhenVisible() {
     // Don't call next when the page isn't visible
     // or the carousel or its parent isn't visible
-    if (!document.hidden && Util.isVisible(this._element)) {
+    if (!document.hidden && isVisible(this._element)) {
       this.next()
     }
   }
@@ -160,7 +171,7 @@ class Carousel {
     }
 
     if (SelectorEngine.findOne(Selector.NEXT_PREV, this._element)) {
-      Util.triggerTransitionEnd(this._element)
+      triggerTransitionEnd(this._element)
       this.cycle(true)
     }
 
@@ -233,7 +244,7 @@ class Carousel {
       ...Default,
       ...config
     }
-    Util.typeCheckConfig(NAME, config, DefaultType)
+    typeCheckConfig(NAME, config, DefaultType)
     return config
   }
 
@@ -320,7 +331,7 @@ class Carousel {
       }
     }
 
-    Util.makeArray(SelectorEngine.find(Selector.ITEM_IMG, this._element)).forEach((itemImg) => {
+    makeArray(SelectorEngine.find(Selector.ITEM_IMG, this._element)).forEach((itemImg) => {
       EventHandler.on(itemImg, Event.DRAG_START, (e) => e.preventDefault())
     })
 
@@ -356,7 +367,7 @@ class Carousel {
 
   _getItemIndex(element) {
     this._items = element && element.parentNode
-      ? Util.makeArray(SelectorEngine.find(Selector.ITEM, element.parentNode))
+      ? makeArray(SelectorEngine.find(Selector.ITEM, element.parentNode))
       : []
 
     return this._items.indexOf(element)
@@ -457,10 +468,9 @@ class Carousel {
     this._setActiveIndicatorElement(nextElement)
 
     if (this._element.classList.contains(ClassName.SLIDE)) {
+      reflow(nextElement)
+
       nextElement.classList.add(orderClassName)
-
-      Util.reflow(nextElement)
-
       activeElement.classList.add(directionalClassName)
       nextElement.classList.add(directionalClassName)
 
@@ -472,10 +482,10 @@ class Carousel {
         this._config.interval = this._config.defaultInterval || this._config.interval
       }
 
-      const transitionDuration = Util.getTransitionDurationFromElement(activeElement)
+      const transitionDuration = getTransitionDurationFromElement(activeElement)
 
       EventHandler
-        .one(activeElement, Util.TRANSITION_END, () => {
+        .one(activeElement, TRANSITION_END, () => {
           nextElement.classList.remove(directionalClassName)
           nextElement.classList.remove(orderClassName)
           nextElement.classList.add(ClassName.ACTIVE)
@@ -496,7 +506,7 @@ class Carousel {
           }, 0)
         })
 
-      Util.emulateTransitionEnd(activeElement, transitionDuration)
+      emulateTransitionEnd(activeElement, transitionDuration)
     } else {
       activeElement.classList.remove(ClassName.ACTIVE)
       nextElement.classList.add(ClassName.ACTIVE)
@@ -557,7 +567,7 @@ class Carousel {
   }
 
   static _dataApiClickHandler(event) {
-    const selector = Util.getSelectorFromElement(this)
+    const selector = getSelectorFromElement(this)
 
     if (!selector) {
       return
@@ -603,7 +613,7 @@ EventHandler
   .on(document, Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler)
 
 EventHandler.on(window, Event.LOAD_DATA_API, () => {
-  const carousels = Util.makeArray(SelectorEngine.find(Selector.DATA_RIDE))
+  const carousels = makeArray(SelectorEngine.find(Selector.DATA_RIDE))
   for (let i = 0, len = carousels.length; i < len; i++) {
     Carousel._carouselInterface(carousels[i], Data.getData(carousels[i], DATA_KEY))
   }
@@ -616,7 +626,6 @@ EventHandler.on(window, Event.LOAD_DATA_API, () => {
  * add .carousel to jQuery only if jQuery is present
  */
 
-const $ = Util.jQuery
 if (typeof $ !== 'undefined') {
   const JQUERY_NO_CONFLICT = $.fn[NAME]
   $.fn[NAME]               = Carousel._jQueryInterface
