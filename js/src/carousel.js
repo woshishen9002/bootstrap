@@ -13,7 +13,6 @@ import {
   getTransitionDurationFromElement,
   isVisible,
   makeArray,
-  reflow,
   triggerTransitionEnd,
   typeCheckConfig
 } from './util/index'
@@ -468,8 +467,6 @@ class Carousel {
     this._setActiveIndicatorElement(nextElement)
 
     if (this._element.classList.contains(ClassName.SLIDE)) {
-      reflow(nextElement)
-
       nextElement.classList.add(orderClassName)
       activeElement.classList.add(directionalClassName)
       nextElement.classList.add(directionalClassName)

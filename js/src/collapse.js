@@ -13,7 +13,6 @@ import {
   getTransitionDurationFromElement,
   isElement,
   makeArray,
-  reflow,
   typeCheckConfig
 } from './util/index'
 import Data from './dom/data'
@@ -233,8 +232,6 @@ class Collapse {
     const dimension = this._getDimension()
 
     this._element.style[dimension] = `${this._element.getBoundingClientRect()[dimension]}px`
-
-    reflow(this._element)
 
     this._element.classList.add(ClassName.COLLAPSING)
     this._element.classList.remove(ClassName.COLLAPSE)

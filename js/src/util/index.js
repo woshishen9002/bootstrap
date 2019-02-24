@@ -157,8 +157,6 @@ const findShadowRoot = (element) => {
 // eslint-disable-next-line no-empty-function
 const noop = () => function () {}
 
-const reflow = (element) => element.offsetHeight
-
 export {
   jQuery,
   TRANSITION_END,
@@ -172,6 +170,5 @@ export {
   makeArray,
   isVisible,
   findShadowRoot,
-  noop,
-  reflow
+  noop
 }

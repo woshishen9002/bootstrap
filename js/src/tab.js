@@ -11,8 +11,7 @@ import {
   emulateTransitionEnd,
   getSelectorFromElement,
   getTransitionDurationFromElement,
-  makeArray,
-  reflow
+  makeArray
 } from './util/index'
 import Data from './dom/data'
 import EventHandler from './dom/eventHandler'
@@ -190,8 +189,6 @@ class Tab {
     if (element.getAttribute('role') === 'tab') {
       element.setAttribute('aria-selected', true)
     }
-
-    reflow(element)
 
     if (element.classList.contains(ClassName.FADE)) {
       element.classList.add(ClassName.SHOW)

@@ -13,7 +13,6 @@ import {
   getTransitionDurationFromElement,
   isVisible,
   makeArray,
-  reflow,
   typeCheckConfig
 } from './util/index'
 import Data from './dom/data'
@@ -261,10 +260,6 @@ class Modal {
       this._element.scrollTop = 0
     }
 
-    if (transition) {
-      reflow(this._element)
-    }
-
     this._element.classList.add(ClassName.SHOW)
 
     if (this._config.focus) {
@@ -372,10 +367,6 @@ class Modal {
           this.hide()
         }
       })
-
-      if (animate) {
-        reflow(this._backdrop)
-      }
 
       this._backdrop.classList.add(ClassName.SHOW)
 
