@@ -41,4 +41,4 @@ Thumbs.db
 # Folders to ignore
 /js/coverage/
 /node_modules/
-/js/test/README.md
+/js/tests/README.md
